@@ -1,0 +1,19 @@
+[auditlog-group]
+agf-vm0112    ansible_host=10.114.9.151
+agf-vm0116    ansible_host=10.114.9.156
+agf-vm0012    ansible_host=10.140.36.243
+citi-vm0130   ansible_host=10.135.16.224
+citi-vm0132   ansible_host=10.135.16.228
+citi-vm0133   ansible_host=10.135.16.229
+fcb-vm0011    ansible_host=10.160.199.70
+citi-vm010    ansible_host=10.135.16.212
+honda-vm010    ansible_host=10.175.57.69
+honda-vm0117    ansible_host=10.165.31.12
+td-bank-vm0115   ansible_host=10.115.140.78
+rbs-vm0121   ansible_host=10.164.78.112
+albert-vm0111   ansible_host=10.168.220.75
+guardian-vm0116  ansible_host=10.221.80.147
+thermo-vm0111  ansible_host=10.171.76.134
+thermo-vm0116  ansible_host=10.171.76.139
+kp-vm0510  ansible_host=10.169.248.22
+natgrid-vm0110  ansible_host=10.164.143.200

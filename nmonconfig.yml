@@ -1,0 +1,45 @@
+---
+    - name: Let's copy our executable script to remote location, execute script and get result back.
+      remote_user: ansible-user
+      become: yes
+      hosts: nmon-group
+
+      tasks:
+          - name: Create Nmon folder
+            ansible.builtin.file: 
+                  path: /opt/SaaS_Operations/nmon_reports
+                  state: directory
+                  mode: '0775'
+                  recurse: yes
+          
+          - name: Download nmon
+            get_url:
+                url: https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/n/nmon-16g-3.el7.x86_64.rpm
+                dest: /tmp/nmon-16g-3.el7.x86_64.rpm
+                mode: '0774'
+
+          - name: Install nmon rpm from a local file
+            yum:
+              name: /tmp/nmon-16g-3.el7.x86_64.rpm
+              state: present
+                                                                                                                                       
+          - name: Install a list of packages 
+            yum:
+              name: "{{ packages }}"
+            vars:
+              packages:
+                 - sysstat
+                 - mlocate
+                 - vim
+              state: present
+          - name: Execute initial Nmon job
+            command:
+                cmd:  /usr/bin/nmon -l -m -t -f -d 256 -m /opt/SaaS_Operations/nmon_reports/ -s 60 -c 365 
+                mode: 0775
+          - name: Ensure a job that runs at every 6 hours.
+            ansible.builtin.cron:
+                    name: "nmon run"
+                    minute: "0"
+                    hour: "*/6"
+                    job: "/usr/bin/nmon -l -m -t -f -d 256 -m /opt/SaaS_Operations/nmon_reports/ -s 60 -c 365"
+

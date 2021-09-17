@@ -1,0 +1,9 @@
+[patching]
+nat-grid-vm0110 ansible_host=10.164.143.200
+nat-grid-vm0111 ansible_host=10.164.143.201
+nat-grid-vm0112 ansible_host=10.164.143.202
+nat-grid-vm0113 ansible_host=10.164.143.203
+nat-grid-vm0114 ansible_host=10.164.143.204
+nat-grid-vm0115 ansible_host=10.164.143.205
+nat-grid-vm0116 ansible_host=10.164.143.206
+

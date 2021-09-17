@@ -1,0 +1,10 @@
+[nmon-group]
+thermo-vm0110    ansible_host=10.171.76.133
+thermo-vm0111    ansible_host=10.171.76.134
+thermo-vm0112    ansible_host=10.171.76.135
+thermo-vm0113    ansible_host=10.171.76.136
+thermo-vm0114    ansible_host=10.171.76.137
+thermo-vm0115    ansible_host=10.171.76.138
+thermo-vm0116    ansible_host=10.171.76.139
+thermo-vm0117    ansible_host=10.171.76.140
+thermo-vm0118    ansible_host=10.171.76.141

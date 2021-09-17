@@ -1,0 +1,83 @@
+---
+- name: Install latest Updatess to RHEL.
+  remote_user: ansible-user
+  become: yes
+  any_errors_fatal: false
+  hosts: patching
+  vars:
+      date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+
+  tasks:
+       - name: Clear Old Yum Database
+         shell: /bin/rm -rf /var/cache/yum/*
+
+         notify: 
+            - yum clean all
+
+       - name: remove the release
+         command: subscription-manager release --unset
+
+       - name: Enable  repositories 
+         community.general.rhsm_repository:
+           name: 
+                -  rhel-7-server-eus-rpms
+                -  rhel-7-server-rpms
+           state: enabled
+
+         notify: yum clean all
+       
+       - name: remove unavailable repos
+         command: yum-config-manager --save --setopt=rhel-7-server-eus-rpms.skip_if_unavailable=true
+       
+      # - name: install updates
+      #   command: yum update --security -y
+         
+
+       - name: checking updates
+         yum:
+             security: yes
+             state: latest
+#         check_mode: yes
+         register: yum_output
+         become: true
+
+       - name: show that yum output
+         debug:
+           var: yum_output
+
+
+#Post RHEL Upgrdae Section
+
+       - name: copy crypt files
+         copy:
+            src: /root/cryptroot-ask.sh
+            dest: /usr/lib/dracut/modules.d/90crypt
+
+       - name: copy crypt files2
+         copy:
+            src: /root/module-setup.sh
+            dest: /usr/lib/dracut/modules.d/90crypt
+
+       - name: grep installed kernel 
+         - shell: ls -tr /lib/modules|tail -1
+           register: kernel_installed
+         - debug: 
+            msg: "{{kernel_installed}}"
+       
+       - name: install kernel with dracut
+         command: dracut -v --kver {{kernel_installed}} -f
+
+       - name: set release to 7.9
+         command: subscription-manager release --set=7.9
+         register: release_output
+
+       - name: show releases
+         debug: 
+           var: release_output
+
+  handlers:
+
+       - name: yum clean all 
+         command: yum clean all
+         args:
+           warn: no

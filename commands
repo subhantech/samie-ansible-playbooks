@@ -1,0 +1,9 @@
+/var/log/commands.log {
+        weekly
+        missingok
+        rotate 14
+        compress
+        copytruncate
+        minsize 100k
+}
+

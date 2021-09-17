@@ -1,0 +1,39 @@
+---
+- name: Install latest Updatess to RHEL.
+  remote_user: ansible-user
+  become: yes
+  any_errors_fatal: false
+  hosts: patching
+  vars:
+      date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+
+  tasks:
+
+       - name: checking updates
+         yum:
+             security: yes
+             state: latest
+#         check_mode: yes
+         register: yum_output
+         become: true
+
+       - name: show that yum output
+         debug:
+           var: yum_output
+
+
+#Post RHEL Upgrdae Section
+
+
+       - name: Grep installed kernel 
+         
+         shell: ls -tr /lib/modules|tail -1
+         register: kernel_installed
+         
+       - name: printe kernel  
+         debug: 
+            msg: "{{kernel_installed.stdout}}"
+       
+       - name: install kernel with dracut
+         command: dracut -v --kver "{{kernel_installed.stdout}}" -f
+#

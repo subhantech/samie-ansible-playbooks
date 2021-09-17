@@ -1,0 +1,30 @@
+---
+- name: Let's copy our executable script to remote location, execute script and get result back.
+  remote_user: ansible-user
+  become: yes
+  hosts: auditlog-group
+  vars:
+      date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+  tasks:
+     - name: Transfer executable script to rotate audit logs
+       copy: src=/root/samie/auditlogrotate.sh dest=/tmp/auditlogrotate.sh mode=0777
+     
+     - name: Transfer the command logrotate cron to /etc/logrotate.d
+       copy: src=/root/samie/commands dest=/etc/logrotate.d/commands mode=0644
+ 
+     - name: Execute the script
+       command: sh /tmp/auditlogrotate.sh
+     
+     - name: Zip the command log if more than 500MB
+       archive:
+              path: /var/log/commands.log
+              dest: /var/log/commands.log_{{date}}.zip
+              format: zip
+              remove: yes
+       ignore_errors: yes
+
+     - name: Execute the df script
+       command: df -h 
+       register: df 
+
+     - debug: var=df.stdout_lines
