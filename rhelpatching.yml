@@ -11,6 +11,7 @@
        - name: Clear Old Yum Database
          shell: /bin/rm -rf /var/cache/yum/*
 
+         
          notify: 
             - yum clean all
 
@@ -58,14 +59,6 @@
             src: /root/module-setup.sh
             dest: /usr/lib/dracut/modules.d/90crypt
 
-       - name: grep installed kernel 
-         - shell: ls -tr /lib/modules|tail -1
-           register: kernel_installed
-         - debug: 
-            msg: "{{kernel_installed}}"
-       
-       - name: install kernel with dracut
-         command: dracut -v --kver {{kernel_installed}} -f
 
        - name: set release to 7.9
          command: subscription-manager release --set=7.9

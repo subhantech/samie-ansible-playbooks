@@ -36,4 +36,12 @@
        
        - name: install kernel with dracut
          command: dracut -v --kver "{{kernel_installed.stdout}}" -f
-#
+
+       - name: set release to 7.9
+         command: subscription-manager release --set=7.9
+         register: release_output
+                         
+       - name: show releases
+         debug:
+           var: release_output
+                                                    #
