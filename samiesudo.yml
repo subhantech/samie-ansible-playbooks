@@ -1,0 +1,13 @@
+---
+- name: Let's make samie bhai password letss sudo on all the servers.
+  remote_user: ansible-user
+  become: yes
+  any_errors_fatal: false
+  hosts: auditlog-group
+  vars:
+      date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+
+  tasks:
+       - name: create a sudoer file for samie
+         copy: src=/root/samie/samiesudo dest=/etc/sudoers.d/samiesudo mode=0644
+ 
